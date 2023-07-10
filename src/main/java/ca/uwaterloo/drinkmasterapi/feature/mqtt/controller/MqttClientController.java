@@ -1,6 +1,5 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.controller;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.PourItem;
 import ca.uwaterloo.drinkmasterapi.feature.mqtt.service.MqttClientService;
 import com.amazonaws.services.iot.client.AWSIotException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -45,12 +42,12 @@ public class MqttClientController {
     //todo: add drinkmaster endpoint
     @GetMapping("/pour")
     public ResponseEntity publishPourMessage(@RequestParam("id") final Integer id,
-                                             @RequestParam("machineId") final Integer machineId,
-                                             @RequestParam("transId") final Integer transId,
-                                             @RequestParam("time") final Timestamp time,
-                                             @RequestParam("content") final List<PourItem> content
+                                             @RequestParam(value = "machineId") final Integer machineId,
+                                             @RequestParam(value = "transId") final Integer transId,
+                                             @RequestParam(value = "time", required = false) final String time,
+                                             @RequestParam(value = "content") final String content
     ) throws AWSIotException {
-        this.mqttClientServiceImpl.publishPourMessage(id,machineId,transId,time,content);
+        this.mqttClientServiceImpl.publishPourMessage(id, machineId, transId, time, content);
         return ResponseEntity.ok().build();
     }
 }

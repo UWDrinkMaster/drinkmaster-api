@@ -1,6 +1,5 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.service;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.PourItem;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -23,11 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class MqttClientServiceImpl implements MqttClientService {
@@ -59,8 +54,8 @@ public class MqttClientServiceImpl implements MqttClientService {
     public void publishGdprMessage(final String locationId) throws AWSIotException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode gdprObject = objectMapper.createObjectNode();
-        gdprObject.put("locationId",locationId);
-        AWSIotMessage pub = new AWSIotMessage(GDPR_TOPIC,AWSIotQos.QOS1,gdprObject.toString());
+        gdprObject.put("locationId", locationId);
+        AWSIotMessage pub = new AWSIotMessage(GDPR_TOPIC, AWSIotQos.QOS1, gdprObject.toString());
         this.awsIotMqttClient.publish(pub);
         logger.info("gdpr message is sent");
     }
@@ -96,14 +91,14 @@ public class MqttClientServiceImpl implements MqttClientService {
     }
 
     @Override
-    public void publishPourMessage(Integer id,Integer machineId, Integer transId, Timestamp time, List<PourItem> content) throws AWSIotException {
+    public void publishPourMessage(Integer id, Integer machineId, Integer transId, String time, String content) throws AWSIotException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode pourObject = objectMapper.createObjectNode();
-        pourObject.put("id",id);
+        pourObject.put("id", id);
         pourObject.put("transId", transId);
-        pourObject.put("time", time.toString());
-        pourObject.put("content",content.stream().map(Object::toString).collect(Collectors.joining(",")));
-        AWSIotMessage pub = new AWSIotMessage("aws_iot/"+ machineId + "/"+ POUR_TOPIC, AWSIotQos.QOS1, pourObject.toString());
+        pourObject.put("time", time);
+        pourObject.put("content", content);
+        AWSIotMessage pub = new AWSIotMessage("aws_iot/" + machineId + "/" + POUR_TOPIC, AWSIotQos.QOS1, pourObject.toString());
         this.awsIotMqttClient.publish(pub);
         logger.info("pour cmd is sent");
     }

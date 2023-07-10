@@ -1,11 +1,15 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.model;
 
-
+// not used for mqtt
 public class PourItem {
 
     private int id;
     private float amount;
 
+    public PourItem(int id, float amount) {
+        this.id = id;
+        this.amount = amount;
+    }
 
     public int getId() {
         return id;
@@ -25,7 +29,7 @@ public class PourItem {
 
     @Override
     public String toString() {
-        return "PourItem{" +
+        return "{" +
                 "id=" + id +
                 ", amount=" + amount +
                 '}';
