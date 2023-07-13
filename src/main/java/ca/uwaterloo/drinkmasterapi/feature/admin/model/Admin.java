@@ -19,13 +19,16 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "phoneNumber", unique = true)
+    private String phoneNumber;
+
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "isEnabled", nullable = false)
