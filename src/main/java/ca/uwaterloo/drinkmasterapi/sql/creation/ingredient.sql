@@ -7,5 +7,6 @@ CREATE TABLE `ingredient` (
                             inventory DOUBLE DEFAULT 0.0,
                             isActive BOOLEAN DEFAULT true COMMENT 'Flag indicating if the ingredient is active',
                             createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                            modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                            modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            FOREIGN KEY (machineId) REFERENCES `machine` (id)
 );

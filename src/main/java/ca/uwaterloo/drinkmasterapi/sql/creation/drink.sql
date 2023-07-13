@@ -11,5 +11,7 @@ CREATE TABLE `drink` (
                        userId BIGINT COMMENT 'User ID associated with the customized drink (Not NULL if isCustomized is TRUE)',
                        machineId BIGINT COMMENT 'Machine ID associated with the standard drink (Not NULL if isCustomized is False)',
                        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                       modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                       modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                       FOREIGN KEY (userId) REFERENCES `user` (id),
+                       FOREIGN KEY (machineId) REFERENCES `machine` (id)
 );

@@ -4,6 +4,6 @@ CREATE TABLE `ingredient_allergy` (
                                     allergyId BIGINT,
                                     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                     modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                    FOREIGN KEY (ingredientId) REFERENCES ingredient(id),
-                                    FOREIGN KEY (allergyId) REFERENCES allergy(id)
+                                    FOREIGN KEY (ingredientId) REFERENCES `ingredient` (id),
+                                    FOREIGN KEY (allergyId) REFERENCES `allergy` (id)
 );

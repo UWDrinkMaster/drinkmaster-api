@@ -7,7 +7,7 @@ CREATE TABLE `order` (
                          status VARCHAR(255) NOT NULL,
                          createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (machineId) REFERENCES machine(id),
-                         FOREIGN KEY (userId) REFERENCES user(id),
-                         FOREIGN KEY (drinkId) REFERENCES drink(id)
+                         FOREIGN KEY (machineId) REFERENCES `machine` (id),
+                         FOREIGN KEY (userId) REFERENCES `user` (id),
+                         FOREIGN KEY (drinkId) REFERENCES `drink` (id)
 );
