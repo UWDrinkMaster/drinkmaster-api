@@ -17,10 +17,10 @@ public class Machine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "deviceId", nullable = false)
+    @Column(name = "deviceId", nullable = false, unique = true)
     private String deviceId;
 
-    @Column(name = "privateKey", nullable = false)
+    @Column(name = "privateKey", nullable = false, unique = true)
     private String privateKey;
 
     @Column(name = "location", nullable = false)

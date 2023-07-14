@@ -7,7 +7,7 @@ CREATE TABLE `admin`
     password    VARCHAR(255),
     isEnabled   BOOLEAN               DEFAULT true COMMENT 'Flag indicating if the user account is enabled',
     imageURL    VARCHAR(255) COMMENT 'URL of the profile picture of the user',
-    signedInAt  TIMESTAMP,
+    signedInAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     createdAt   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modifiedAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT check_email_or_phone CHECK (
