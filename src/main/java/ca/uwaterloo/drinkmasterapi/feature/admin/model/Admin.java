@@ -22,7 +22,7 @@ public class Admin {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "phoneNumber", unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     @Column(name = "email", unique = true)
@@ -31,19 +31,19 @@ public class Admin {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "isEnabled", nullable = false)
+    @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled;
 
-    @Column(name = "imageURL")
+    @Column(name = "image_url")
     private String imageURL;
 
-    @Column(name = "signedInAt")
+    @Column(name = "signed_in_at")
     private OffsetDateTime signedInAt;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 
     @ManyToMany

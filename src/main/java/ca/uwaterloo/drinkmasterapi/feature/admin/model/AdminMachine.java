@@ -19,17 +19,16 @@ public class AdminMachine {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "adminId")
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @ManyToOne
-    @JoinColumn(name = "machineId")
+    @JoinColumn(name = "machine_id")
     private Machine machine;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime modifiedAt;
 }
-

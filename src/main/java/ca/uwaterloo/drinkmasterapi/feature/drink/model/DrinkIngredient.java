@@ -18,19 +18,19 @@ public class DrinkIngredient {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "drinkId")
+    @JoinColumn(name = "drink_id")
     private Drink drink;
 
     @ManyToOne
-    @JoinColumn(name = "ingredientId")
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
     @Column(name = "quantity", nullable = false, columnDefinition = "DOUBLE DEFAULT 0.0")
     private Double quantity;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 }

@@ -1,7 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.model;
 
 import ca.uwaterloo.drinkmasterapi.feature.drink.model.Allergy;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,47 +20,47 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "phoneNumber", unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "isEnabled", nullable = false)
+    @Column(name = "is_enabled")
     private Boolean isEnabled;
 
-    @Column(name = "imageURL")
+    @Column(name = "image_url")
     private String imageURL;
 
-    @Column(name = "dateOfBirth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "lastSobrietyTestScore")
+    @Column(name = "last_sobriety_test_score")
     private Double lastSobrietyTestScore;
 
-    @Column(name = "lastSobrietyTestAt")
+    @Column(name = "last_sobriety_test_at")
     private OffsetDateTime lastSobrietyTestAt;
 
-    @Column(name = "signedInAt")
+    @Column(name = "signed_in_at")
     private OffsetDateTime signedInAt;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 
     @ManyToMany
     @JoinTable(
-            name = "ingredient_allergy",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "allergyId")
+            name = "user_allergy",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "allergy_id")
     )
     private List<Allergy> allergies;
 }
