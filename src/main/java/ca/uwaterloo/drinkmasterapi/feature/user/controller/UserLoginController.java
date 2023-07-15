@@ -5,6 +5,7 @@ import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.service.IUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,6 @@ public class UserLoginController {
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDTO signupRequest) {
         loginService.signup(signupRequest);
         // Perform additional actions or return response as needed
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
