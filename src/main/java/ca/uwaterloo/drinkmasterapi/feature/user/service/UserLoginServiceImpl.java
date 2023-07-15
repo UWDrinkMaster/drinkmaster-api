@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 @Slf4j
 @Service
 public class UserLoginServiceImpl implements IUserLoginService {
@@ -56,6 +58,9 @@ public class UserLoginServiceImpl implements IUserLoginService {
             log.error("Invalid password: {}", loginRequest.getPassword());
             throw new InvalidCredentialsException("Invalid email or password");
         }
+
+        // Set the signedInAt field to the current timestamp
+        user.setSignedInAt(OffsetDateTime.now());
 
         log.info("User logged in successfully: {}", user);
         return user;
