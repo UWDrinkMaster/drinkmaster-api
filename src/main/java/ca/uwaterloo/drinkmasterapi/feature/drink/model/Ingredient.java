@@ -31,24 +31,24 @@ public class Ingredient {
     @Column(name = "inventory", columnDefinition = "DOUBLE DEFAULT 0.0")
     private Double inventory;
 
-    @Column(name = "isActive", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 
     @ManyToMany
     @JoinTable(
             name = "ingredient_allergy",
-            joinColumns = @JoinColumn(name = "ingredientId"),
-            inverseJoinColumns = @JoinColumn(name = "allergyId")
+            joinColumns = @JoinColumn(name = "ingredient_id"),
+            inverseJoinColumns = @JoinColumn(name = "allergy_id")
     )
     private List<Allergy> allergies;
 
     @ManyToOne
-    @JoinColumn(name = "machineId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "machine_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Machine machine;
 }

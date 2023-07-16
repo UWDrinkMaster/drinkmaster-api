@@ -17,10 +17,10 @@ public class Machine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "deviceId", nullable = false)
+    @Column(name = "device_id", nullable = false, unique = true)
     private String deviceId;
 
-    @Column(name = "privateKey", nullable = false)
+    @Column(name = "private_key", nullable = false, unique = true)
     private String privateKey;
 
     @Column(name = "location", nullable = false)
@@ -29,9 +29,9 @@ public class Machine {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 }

@@ -1,7 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.model;
 
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Allergy;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,59 +10,63 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
 @ToString
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @JsonProperty("username")
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "phoneNumber", unique = true)
+    @JsonProperty("phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(name = "email", unique = true)
+    @JsonProperty("email")
+    @Column(name = "email")
     private String email;
 
+    @JsonProperty("password")
     @Column(name = "password")
     private String password;
 
-    @Column(name = "isEnabled", nullable = false)
+    @JsonProperty("is_enabled")
+    @Column(name = "is_enabled")
     private Boolean isEnabled;
 
-    @Column(name = "imageURL")
-    private String imageURL;
+    @JsonProperty("image_url")
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    @Column(name = "dateOfBirth")
+    @JsonProperty("date_of_birth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "lastSobrietyTestScore")
+    @JsonProperty("last_sobriety_test_score")
+    @Column(name = "last_sobriety_test_score")
     private Double lastSobrietyTestScore;
 
-    @Column(name = "lastSobrietyTestAt")
+    @JsonProperty("last_sobriety_test_at")
+    @Column(name = "last_sobriety_test_at")
     private OffsetDateTime lastSobrietyTestAt;
 
-    @Column(name = "signedInAt")
+    @JsonProperty("signed_in_at")
+    @Column(name = "signed_in_at")
     private OffsetDateTime signedInAt;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @JsonProperty("created_at")
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @JsonProperty("modified_at")
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
-
-    @ManyToMany
-    @JoinTable(
-            name = "ingredient_allergy",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "allergyId")
-    )
-    private List<Allergy> allergies;
 }

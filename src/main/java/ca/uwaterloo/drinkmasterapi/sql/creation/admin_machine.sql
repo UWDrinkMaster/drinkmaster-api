@@ -1,10 +1,12 @@
+DROP TABLE IF EXISTS `admin_machine`;
+
 CREATE TABLE `admin_machine`
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    adminId    BIGINT,
-    machineId  BIGINT,
-    createdAt  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modifiedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (adminId) REFERENCES `admin` (id),
-    FOREIGN KEY (machineId) REFERENCES `machine` (id)
+    admin_id   BIGINT,
+    machine_id BIGINT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES `admin` (id),
+    FOREIGN KEY (machine_id) REFERENCES `machine` (id)
 );

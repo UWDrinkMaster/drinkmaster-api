@@ -2,7 +2,6 @@ package ca.uwaterloo.drinkmasterapi.feature.drink.model;
 
 import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
-import jdk.internal.net.http.common.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,13 +23,13 @@ public class Drink {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "imageURL")
+    @Column(name = "image_url")
     private String imageURL;
 
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "priceCurrency", nullable = false)
+    @Column(name = "price_currency", nullable = false)
     private String priceCurrency;
 
     @Column(name = "category")
@@ -39,31 +38,31 @@ public class Drink {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "isActive", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "isCustomized", nullable = false)
+    @Column(name = "is_customized", nullable = false)
     private Boolean isCustomized;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "machineId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "machine_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Machine machine;
 
     @ManyToMany
     @JoinTable(
             name = "drink_ingredient",
-            joinColumns = @JoinColumn(name = "drinkId"),
-            inverseJoinColumns = @JoinColumn(name = "ingredientId")
+            joinColumns = @JoinColumn(name = "drink_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     private List<DrinkIngredient> ingredients;
 }

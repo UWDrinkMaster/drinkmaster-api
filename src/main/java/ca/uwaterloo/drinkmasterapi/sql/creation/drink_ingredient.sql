@@ -1,11 +1,13 @@
+DROP TABLE IF EXISTS `drink_ingredient`;
+
 CREATE TABLE `drink_ingredient`
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    drinkId      BIGINT,
-    ingredientId BIGINT,
-    quantity     DOUBLE             DEFAULT 0.0,
-    createdAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modifiedAt   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (drinkId) REFERENCES `drink` (id),
-    FOREIGN KEY (ingredientId) REFERENCES `ingredient` (id)
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    drink_id      BIGINT,
+    ingredient_id BIGINT,
+    quantity      DOUBLE             DEFAULT 0.0,
+    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (drink_id) REFERENCES `drink` (id),
+    FOREIGN KEY (ingredient_id) REFERENCES `ingredient` (id)
 );

@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 @Getter
 @Setter
 @ToString
@@ -21,15 +21,15 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "machineId")
+    @JoinColumn(name = "machine_id")
     private Machine machine;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "drinkId")
+    @JoinColumn(name = "drink_id")
     private Drink drink;
 
     @Column(name = "quantity", nullable = false)
@@ -38,16 +38,16 @@ public class Order {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "priceCurrency", nullable = false)
+    @Column(name = "price_currency", nullable = false)
     private String priceCurrency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatusEnum status;
 
-    @Column(name = "createdAt", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
 
-    @Column(name = "modifiedAt", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime modifiedAt;
 }

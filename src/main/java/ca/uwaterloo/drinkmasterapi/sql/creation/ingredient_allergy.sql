@@ -1,10 +1,12 @@
+DROP TABLE IF EXISTS `ingredient_allergy`;
+
 CREATE TABLE `ingredient_allergy`
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    ingredientId BIGINT,
-    allergyId    BIGINT,
-    createdAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modifiedAt   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ingredientId) REFERENCES `ingredient` (id),
-    FOREIGN KEY (allergyId) REFERENCES `allergy` (id)
+    id             BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ingredient_id  BIGINT,
+    allergy_id     BIGINT,
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ingredient_id) REFERENCES `ingredient` (id),
+    FOREIGN KEY (allergy_id) REFERENCES `allergy` (id)
 );
