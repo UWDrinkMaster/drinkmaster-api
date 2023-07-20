@@ -8,11 +8,11 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "ingredient_allergy")
+@Table(name = "ingredient_allergen")
 @Getter
 @Setter
 @ToString
-public class IngredientAllergy {
+public class IngredientAllergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +22,8 @@ public class IngredientAllergy {
     private Ingredient ingredient;
 
     @ManyToOne
-    @JoinColumn(name = "allergy_id")
-    private Allergy allergy;
+    @JoinColumn(name = "allergen_id")
+    private Allergen allergen;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;

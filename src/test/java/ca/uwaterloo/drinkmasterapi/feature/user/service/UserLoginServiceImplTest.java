@@ -1,5 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.service;
 
+import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
@@ -60,7 +61,7 @@ class UserLoginServiceImplTest {
     }
 
     @Test
-    void testLogin_InvalidEmail_ThrowsException() {
+    void testLogin_InvalidEmail_ThrowsInvalidCredentialsException() {
         // Arrange
         String email = "test@example.com";
         String password = "password";
@@ -72,11 +73,11 @@ class UserLoginServiceImplTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginRequest));
+        assertThrows(InvalidCredentialsException.class, () -> loginService.login(loginRequest));
     }
 
     @Test
-    void testLogin_InvalidPassword_ThrowsException() {
+    void testLogin_InvalidPassword_ThrowsInvalidCredentialsException() {
         // Arrange
         String email = "test@example.com";
         String password = "password";
@@ -94,6 +95,6 @@ class UserLoginServiceImplTest {
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(false);
 
         // Act and Assert
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginRequest));
+        assertThrows(InvalidCredentialsException.class, () -> loginService.login(loginRequest));
     }
 }

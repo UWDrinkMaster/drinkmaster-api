@@ -8,11 +8,11 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "allergy")
+@Table(name = "allergen")
 @Getter
 @Setter
 @ToString
-public class Allergy {
+public class Allergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
