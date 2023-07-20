@@ -42,11 +42,11 @@ public class Ingredient {
 
     @ManyToMany
     @JoinTable(
-            name = "ingredient_allergy",
+            name = "ingredient_allergen",
             joinColumns = @JoinColumn(name = "ingredient_id"),
-            inverseJoinColumns = @JoinColumn(name = "allergy_id")
+            inverseJoinColumns = @JoinColumn(name = "allergen_id")
     )
-    private List<Allergy> allergies;
+    private List<Allergen> allergens;
 
     @ManyToOne
     @JoinColumn(name = "machine_id", referencedColumnName = "id", insertable = false, updatable = false)

@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.model;
 
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Allergy;
+import ca.uwaterloo.drinkmasterapi.feature.drink.model.Allergen;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,11 +9,11 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "user_allergy")
+@Table(name = "user_allergen")
 @Getter
 @Setter
 @ToString
-public class UserAllergy {
+public class UserAllergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +23,8 @@ public class UserAllergy {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "allergy_id")
-    private Allergy allergy;
+    @JoinColumn(name = "allergen_id")
+    private Allergen allergen;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
