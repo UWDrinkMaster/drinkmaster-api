@@ -1,53 +1,48 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.model;
 
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "`order`")
 @Getter
 @Setter
-@ToString
+@Data
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "machine_id")
-    private Machine machine;
+    @Column(name = "machine_id", nullable = false)
+    private Long machineId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "drink_id")
-    private Drink drink;
+    @Column(name = "drink_id", nullable = false)
+    private Long drinkId;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private Double price;
+    private double price;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "price_currency", nullable = false)
-    private String priceCurrency;
+    private CurrencyEnum priceCurrency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatusEnum status;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime createdAt;
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
 
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime modifiedAt;
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime modifiedAt;
 }

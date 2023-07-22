@@ -1,37 +1,37 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "machine")
 @Getter
 @Setter
-@ToString
+@Data
 public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "device_id", nullable = false, unique = true)
+    @Column(name = "device_id", unique = true)
     private String deviceId;
 
-    @Column(name = "private_key", nullable = false, unique = true)
+    @Column(name = "private_key", unique = true)
     private String privateKey;
 
-    @Column(name = "location", nullable = false)
+    @Column(name = "location")
     private String location;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime createdAt;
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
 
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime modifiedAt;
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime modifiedAt;
 }

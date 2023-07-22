@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginResponseDTO {
+public class UserResponseDTO {
     @JsonProperty("id")
     @ApiModelProperty(value = "User ID", example = "1")
     private Long id;
@@ -58,7 +58,7 @@ public class LoginResponseDTO {
     private LocalDateTime modifiedAt;
 
     // Constructor to convert from User to LoginResponseDTO
-    public LoginResponseDTO(User user) {
+    public UserResponseDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.phoneNumber = user.getPhoneNumber();
