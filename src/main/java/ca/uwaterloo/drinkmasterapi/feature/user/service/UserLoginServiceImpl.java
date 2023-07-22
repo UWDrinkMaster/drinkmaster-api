@@ -35,16 +35,11 @@ public class UserLoginServiceImpl implements IUserLoginService {
 
         // Create a new user entity
         User user = new User();
-        LocalDateTime currentTime = LocalDateTime.now().withNano(0);
 
         user.setUsername(signupRequest.getEmail());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setIsEnabled(true);
-        user.setLastSobrietyTestAt(currentTime);
-        user.setModifiedAt(currentTime);
-        user.setSignedInAt(currentTime);
-        user.setModifiedAt(currentTime);
 
         // Save the user to the database
         userRepository.save(user);
