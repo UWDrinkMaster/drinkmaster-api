@@ -98,6 +98,7 @@ CREATE DATABASE drink_master;
 
 - `01_drop_tables.sql`
 - `01_create_tables.sql`
+- `02_insert_tables.sql`
 
 ## 4. Running Tests
 

@@ -2,20 +2,26 @@ package ca.uwaterloo.drinkmasterapi.feature.user.service;
 
 import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 class UserLoginServiceImplTest {
     @Mock
     private UserRepository userRepository;
@@ -32,32 +38,20 @@ class UserLoginServiceImplTest {
     }
 
     @Test
-    void testLogin_ValidCredentials_ReturnsUser() {
+    void testSignup_EmailAlreadyRegistered_ThrowsInvalidCredentialsException() {
         // Arrange
         String email = "test@example.com";
         String password = "password";
-        String encodedPassword = "encodedPassword";
 
-        LoginRequestDTO loginRequest = new LoginRequestDTO();
-        loginRequest.setEmail(email);
-        loginRequest.setPassword(password);
+        SignupRequestDTO signupRequest = new SignupRequestDTO();
+        signupRequest.setEmail(email);
+        signupRequest.setPassword(password);
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(encodedPassword);
+        // Assume user with email already exists in the database
+        when(userRepository.existsByEmail(email)).thenReturn(true);
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
-
-        // Act
-        User result = loginService.login(loginRequest);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(email, result.getEmail());
-
-        // Verify that the userRepository.findByEmail method was called with the correct email parameter
-        verify(userRepository).findByEmail(email);
+        // Act and Assert
+        assertThrows(InvalidCredentialsException.class, () -> loginService.signup(signupRequest));
     }
 
     @Test

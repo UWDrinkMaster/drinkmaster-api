@@ -6,7 +6,11 @@ import javax.validation.constraints.Pattern;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Data
 public class SignupRequestDTO {
     @NotBlank(message = "Email should not be blank")

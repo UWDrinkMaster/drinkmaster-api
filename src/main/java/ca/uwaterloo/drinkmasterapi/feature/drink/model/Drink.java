@@ -1,36 +1,35 @@
 package ca.uwaterloo.drinkmasterapi.feature.drink.model;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
+import ca.uwaterloo.drinkmasterapi.feature.order.model.CurrencyEnum;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "drink")
 @Getter
 @Setter
-@ToString
+@Data
 public class Drink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "image_url")
-    private String imageURL;
+    private String imageUrl;
 
-    @Column(name = "price", nullable = false)
-    private Double price;
+    @Column(name = "price")
+    private double price;
 
-    @Column(name = "price_currency", nullable = false)
-    private String priceCurrency;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "price_currency")
+    private CurrencyEnum priceCurrency;
 
     @Column(name = "category")
     private String category;
@@ -38,31 +37,21 @@ public class Drink {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active", columnDefinition = "BOOLEAN DEFAULT true")
+    private boolean isActive = true;
 
-    @Column(name = "is_customized", nullable = false)
-    private Boolean isCustomized;
+    @Column(name = "is_customized", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isCustomized = false;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime createdAt;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime modifiedAt;
+    @Column(name = "machine_id")
+    private Long machineId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User user;
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "machine_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Machine machine;
-
-    @ManyToMany
-    @JoinTable(
-            name = "drink_ingredient",
-            joinColumns = @JoinColumn(name = "drink_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
-    )
-    private List<DrinkIngredient> ingredients;
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime modifiedAt;
 }
