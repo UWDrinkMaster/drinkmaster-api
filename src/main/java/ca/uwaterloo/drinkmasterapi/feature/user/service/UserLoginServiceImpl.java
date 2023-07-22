@@ -2,7 +2,7 @@ package ca.uwaterloo.drinkmasterapi.feature.user.service;
 
 import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginResponseDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.model.UserResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
@@ -24,7 +24,7 @@ public class UserLoginServiceImpl implements IUserLoginService {
     }
 
     @Override
-    public void signup(SignupRequestDTO signupRequest) {
+    public UserResponseDTO signup(SignupRequestDTO signupRequest) {
         // Check if the email is already registered
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new InvalidCredentialsException("Email is already registered: " + signupRequest.getEmail());
@@ -39,11 +39,13 @@ public class UserLoginServiceImpl implements IUserLoginService {
         user.setIsEnabled(true);
 
         // Save the user to the database
-        userRepository.save(user);
+        User createdUser = userRepository.save(user);
+
+        return new UserResponseDTO(createdUser);
     }
 
     @Override
-    public LoginResponseDTO login(LoginRequestDTO loginRequest) {
+    public UserResponseDTO login(LoginRequestDTO loginRequest) {
         // Find the user by email or throw InvalidCredentialsException if not found
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email: " + loginRequest.getEmail()));
@@ -57,6 +59,6 @@ public class UserLoginServiceImpl implements IUserLoginService {
         user.setSignedInAt(LocalDateTime.now().withNano(0));
         User updatedUser = userRepository.save(user);
 
-        return new LoginResponseDTO(updatedUser);
+        return new UserResponseDTO(updatedUser);
     }
 }
