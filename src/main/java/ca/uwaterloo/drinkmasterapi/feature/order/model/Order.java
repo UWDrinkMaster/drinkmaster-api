@@ -17,30 +17,30 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "machine_id", nullable = false)
+    @Column(name = "machine_id")
     private Long machineId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "drink_id", nullable = false)
+    @Column(name = "drink_id")
     private Long drinkId;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private double price;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "price_currency", nullable = false)
+    @Column(name = "price_currency")
     private CurrencyEnum priceCurrency;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private OrderStatusEnum status;
 
-    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
