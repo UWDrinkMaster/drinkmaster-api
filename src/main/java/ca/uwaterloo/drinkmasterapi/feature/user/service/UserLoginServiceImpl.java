@@ -2,6 +2,7 @@ package ca.uwaterloo.drinkmasterapi.feature.user.service;
 
 import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -34,18 +35,23 @@ public class UserLoginServiceImpl implements IUserLoginService {
 
         // Create a new user entity
         User user = new User();
+        LocalDateTime currentTime = LocalDateTime.now().withNano(0);
+
         user.setUsername(signupRequest.getEmail());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setIsEnabled(true);
+        user.setLastSobrietyTestAt(currentTime);
+        user.setModifiedAt(currentTime);
+        user.setSignedInAt(currentTime);
+        user.setModifiedAt(currentTime);
 
         // Save the user to the database
-        User savedUser = userRepository.save(user);
-        log.info("User signed up successfully: {}", savedUser);
+        userRepository.save(user);
     }
 
     @Override
-    public User login(LoginRequestDTO loginRequest) {
+    public LoginResponseDTO login(LoginRequestDTO loginRequest) {
         // Find the user by email
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> {
@@ -60,9 +66,9 @@ public class UserLoginServiceImpl implements IUserLoginService {
         }
 
         // Set the signedInAt field to the current timestamp
-        user.setSignedInAt(OffsetDateTime.now());
+        user.setSignedInAt(LocalDateTime.now().withNano(0));
+        User updatedUser = userRepository.save(user);
 
-        log.info("User logged in successfully: {}", user);
-        return user;
+        return new LoginResponseDTO(updatedUser);
     }
 }
