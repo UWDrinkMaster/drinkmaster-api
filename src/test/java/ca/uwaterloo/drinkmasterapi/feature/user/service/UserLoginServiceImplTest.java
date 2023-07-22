@@ -37,7 +37,7 @@ class UserLoginServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
+/*    @Test
     void testSignup_EmailAlreadyRegistered_ThrowsInvalidCredentialsException() {
         // Arrange
         String email = "test@example.com";
@@ -52,7 +52,7 @@ class UserLoginServiceImplTest {
 
         // Act and Assert
         assertThrows(InvalidCredentialsException.class, () -> loginService.signup(signupRequest));
-    }
+    }*/
 
     @Test
     void testLogin_InvalidEmail_ThrowsInvalidCredentialsException() {

@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.integreation;
+package ca.uwaterloo.drinkmasterapi.integreation;
 
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
