@@ -2,7 +2,7 @@ package ca.uwaterloo.drinkmasterapi.handler;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
 import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
-import javassist.NotFoundException;
+import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class ValidationExceptionHandler {
                 .body(new ErrorResponseDTO(ex.getMessage()));
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         log.info(ex.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponseDTO(ex.getMessage()));
