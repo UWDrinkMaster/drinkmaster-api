@@ -6,14 +6,12 @@ import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @Service
 public class UserLoginServiceImpl implements IUserLoginService {
     private final UserRepository userRepository;
@@ -29,8 +27,7 @@ public class UserLoginServiceImpl implements IUserLoginService {
     public void signup(SignupRequestDTO signupRequest) {
         // Check if the email is already registered
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            log.info("Email is already registered: {}", signupRequest.getEmail());
-            throw new InvalidCredentialsException("Email is already registered");
+            throw new InvalidCredentialsException("Email is already registered: " + signupRequest.getEmail());
         }
 
         // Create a new user entity
@@ -47,17 +44,13 @@ public class UserLoginServiceImpl implements IUserLoginService {
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO loginRequest) {
-        // Find the user by email
+        // Find the user by email or throw InvalidCredentialsException if not found
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> {
-                    log.error("Invalid email : {}", loginRequest.getEmail());
-                    return new InvalidCredentialsException("Invalid email or password");
-                });
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email: " + loginRequest.getEmail()));
 
         // Check if the provided password matches the stored password
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            log.error("Invalid password: {}", loginRequest.getPassword());
-            throw new InvalidCredentialsException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid password: " + loginRequest.getPassword());
         }
 
         // Set the signedInAt field to the current timestamp
