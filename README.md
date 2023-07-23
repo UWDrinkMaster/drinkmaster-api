@@ -94,11 +94,21 @@ If you prefer using a local database, follow these steps:
 CREATE DATABASE drink_master;
 ```
 
-4. Run the scripts to create the required tables and insert initial data. Locate the SQL scripts in the `src/main/java/ca/uwaterloo/drinkmasterapi/sql` directory. Execute each script in the following order:
+4. Run the scripts to create the required tables. Locate the SQL scripts in the `src/main/java/ca/uwaterloo/drinkmasterapi/sql` directory. Execute each script in the following order:
 
 - `01_drop_tables.sql`
 - `01_create_tables.sql`
-- `02_insert_tables.sql`
+
+5. (Optional) Insert Initial Data
+
+- Make POST requests to the following endpoints in Swagger UI or any API testing tool like Postman:
+  - `user`: `/user/signup`
+  - `order`: `/order/create`
+
+- Execute the `02_insert_tables.sql` script to insert the initial data into the following tables: 
+  - `machine`
+  - `ingredient`
+  - `drink`
 
 ## 4. Running Tests
 
