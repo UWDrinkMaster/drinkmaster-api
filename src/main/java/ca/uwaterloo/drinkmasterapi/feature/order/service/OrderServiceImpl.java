@@ -15,6 +15,8 @@ import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
@@ -48,6 +50,8 @@ public class OrderServiceImpl implements IOrderService {
 
         // Create the order entity and set the attributes
         Order order = new Order();
+        LocalDateTime currentTime = LocalDateTime.now().withNano(0);
+
         order.setMachineId(orderRequest.getMachineId());
         order.setUserId(orderRequest.getUserId());
         order.setDrinkId(orderRequest.getDrinkId());
@@ -55,6 +59,8 @@ public class OrderServiceImpl implements IOrderService {
         order.setPrice(totalPrice);
         order.setPriceCurrency(drink.getPriceCurrency());
         order.setStatus(OrderStatusEnum.CREATED);
+        order.setCreatedAt(currentTime);
+        order.setModifiedAt(currentTime);
 
         Order savedOrder = orderRepository.save(order);
 
