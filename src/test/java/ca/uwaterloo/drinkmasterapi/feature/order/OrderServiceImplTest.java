@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.service.order;
+package ca.uwaterloo.drinkmasterapi.feature.order;
 
 import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
