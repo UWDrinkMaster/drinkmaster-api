@@ -40,11 +40,11 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequest) {
         // Check if userId, drinkId, and machineId exist
-        User user = userRepository.findById(orderRequest.getUserId())
+        userRepository.findById(orderRequest.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + orderRequest.getUserId() + " not found."));
         Drink drink = drinkRepository.findById(orderRequest.getDrinkId())
                 .orElseThrow(() -> new ResourceNotFoundException ("Drink with ID " + orderRequest.getDrinkId() + " not found."));
-        Machine machine = machineRepository.findById(orderRequest.getMachineId())
+        machineRepository.findById(orderRequest.getMachineId())
                 .orElseThrow(() -> new ResourceNotFoundException ("Machine with ID " + orderRequest.getMachineId() + " not found."));
 
         // Calculate the total price based on the drink price and quantity
@@ -72,7 +72,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<OrderResponseDTO> getOrderByUserId(Long userId) {
         // Check if userId exist
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
 
         // Retrieve all orders belonging to the specified userId
