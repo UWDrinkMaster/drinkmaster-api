@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.service.user;
+package ca.uwaterloo.drinkmasterapi.feature.user;
 
 import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
