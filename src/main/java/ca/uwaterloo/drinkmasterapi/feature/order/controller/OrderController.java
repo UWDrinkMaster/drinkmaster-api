@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -34,5 +35,15 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@Valid @RequestBody OrderRequestDTO orderRequest) {
         OrderResponseDTO responseDTO = orderService.createOrder(orderRequest);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = OrderResponseDTO.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
+    })
+    public ResponseEntity<?> getOrdersByUserId(@PathVariable Long userId) {
+        List<OrderResponseDTO> responseDTOs = orderService.getOrderByUserId(userId);
+        return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 }

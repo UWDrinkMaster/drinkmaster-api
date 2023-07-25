@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -65,5 +67,20 @@ public class OrderServiceImpl implements IOrderService {
         Order savedOrder = orderRepository.save(order);
 
         return new OrderResponseDTO(savedOrder);
+    }
+
+    @Override
+    public List<OrderResponseDTO> getOrderByUserId(Long userId) {
+        // Check if userId exist
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
+
+        // Retrieve all orders belonging to the specified userId
+        List<Order> userOrders = orderRepository.findByUserId(userId);
+
+        // Convert Order entities to OrderResponseDTOs and return the list
+        return userOrders.stream()
+                .map(OrderResponseDTO::new)
+                .collect(Collectors.toList());
     }
 }
