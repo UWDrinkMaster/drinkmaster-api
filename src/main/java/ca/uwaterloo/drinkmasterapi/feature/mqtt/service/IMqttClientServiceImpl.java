@@ -13,7 +13,9 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
 import com.amazonaws.services.securitytoken.model.Credentials;
 import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
 import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +37,16 @@ public class IMqttClientServiceImpl implements IMqttClientService {
     }
 
     @Override
-    public void publishPourMessage(Integer id, Integer machineId, Integer transId, String time, String content) throws AWSIotException {
+    public void publishPourMessage(Integer id, Integer machineId, Integer transId, String time, String content) throws AWSIotException, JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode pourObject = objectMapper.createObjectNode();
+
         pourObject.put("id", id);
         pourObject.put("transId", transId);
         pourObject.put("time", time);
-        pourObject.put("content", content);
+
+        ArrayNode contentArray = (ArrayNode) objectMapper.readTree(content);
+        pourObject.set("content", contentArray);
         AWSIotMessage pub = new AWSIotMessage(constructTopicPath(machineId, MqttTopic.POUR_TOPIC.getTopic()), AWSIotQos.QOS1, pourObject.toString());
         this.awsIotMqttClient.publish(pub);
         logger.info("pour cmd is sent");

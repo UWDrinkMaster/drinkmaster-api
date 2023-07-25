@@ -3,23 +3,23 @@ package ca.uwaterloo.drinkmasterapi.feature.mqtt.model;
 // not used for mqtt
 public class PourItem {
 
-    private int id;
-    private float amount;
+    private int drinkId;
+    private double amount;
 
     public PourItem(int id, float amount) {
-        this.id = id;
+        this.drinkId = id;
         this.amount = amount;
     }
 
-    public int getId() {
-        return id;
+    public int getDrinkId() {
+        return drinkId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDrinkId(int drinkId) {
+        this.drinkId = drinkId;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -30,7 +30,7 @@ public class PourItem {
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
+                "id=" + drinkId +
                 ", amount=" + amount +
                 '}';
     }
