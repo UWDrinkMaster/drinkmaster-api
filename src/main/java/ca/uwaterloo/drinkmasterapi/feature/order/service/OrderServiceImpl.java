@@ -3,19 +3,19 @@ package ca.uwaterloo.drinkmasterapi.feature.order.service;
 import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
 import ca.uwaterloo.drinkmasterapi.feature.drink.repository.DrinkRepository;
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
 import ca.uwaterloo.drinkmasterapi.feature.mqtt.repository.MachineRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.Order;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderStatusEnum;
 import ca.uwaterloo.drinkmasterapi.feature.order.repository.OrderRepository;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -38,11 +38,11 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequest) {
         // Check if userId, drinkId, and machineId exist
-        User user = userRepository.findById(orderRequest.getUserId())
+        userRepository.findById(orderRequest.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + orderRequest.getUserId() + " not found."));
         Drink drink = drinkRepository.findById(orderRequest.getDrinkId())
                 .orElseThrow(() -> new ResourceNotFoundException ("Drink with ID " + orderRequest.getDrinkId() + " not found."));
-        Machine machine = machineRepository.findById(orderRequest.getMachineId())
+        machineRepository.findById(orderRequest.getMachineId())
                 .orElseThrow(() -> new ResourceNotFoundException ("Machine with ID " + orderRequest.getMachineId() + " not found."));
 
         // Calculate the total price based on the drink price and quantity
@@ -65,5 +65,20 @@ public class OrderServiceImpl implements IOrderService {
         Order savedOrder = orderRepository.save(order);
 
         return new OrderResponseDTO(savedOrder);
+    }
+
+    @Override
+    public List<OrderResponseDTO> getOrderByUserId(Long userId) {
+        // Check if userId exist
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
+
+        // Retrieve all orders belonging to the specified userId
+        List<Order> userOrders = orderRepository.findByUserId(userId);
+
+        // Convert Order entities to OrderResponseDTOs and return the list
+        return userOrders.stream()
+                .map(OrderResponseDTO::new)
+                .collect(Collectors.toList());
     }
 }

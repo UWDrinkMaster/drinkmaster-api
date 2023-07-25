@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -115,5 +117,43 @@ public class OrderServiceImplTest {
 
         // Act and Assert
         assertThrows(ResourceNotFoundException.class, () -> orderService.createOrder(orderRequest));
+    }
+
+    @Test
+    public void testGetOrderByUserId_WithValidUserId_Success() {
+        // Arrange
+        Long userId = 1L;
+
+        List<Order> userOrders = new ArrayList<>();
+        Order order1 = new Order();
+        order1.setId(1L);
+        Order order2 = new Order();
+        order2.setId(2L);
+        userOrders.add(order1);
+        userOrders.add(order2);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
+        when(orderRepository.findByUserId(userId)).thenReturn(userOrders);
+
+        // Act
+        List<OrderResponseDTO> responseDTOs = orderService.getOrderByUserId(userId);
+
+        // Assert
+        assertNotNull(responseDTOs);
+        assertEquals(2, responseDTOs.size());
+        assertEquals(1L, responseDTOs.get(0).getId());
+        assertEquals(2L, responseDTOs.get(1).getId());
+    }
+
+    @Test
+    public void testGetOrderByUserId_InvalidUserId_ThrowsResourceNotFoundException() {
+        // Arrange
+        Long invalidUserId = 999L;
+
+        // Mock the userRepository to return an empty Optional, indicating that the user doesn't exist
+        when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
+
+        // Act and Assert
+        assertThrows(ResourceNotFoundException.class, () -> orderService.getOrderByUserId(invalidUserId));
     }
 }
