@@ -1,5 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.model;
 
+import ca.uwaterloo.drinkmasterapi.dao.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

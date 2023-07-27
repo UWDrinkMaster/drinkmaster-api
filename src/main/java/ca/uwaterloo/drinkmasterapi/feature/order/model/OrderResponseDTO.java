@@ -1,5 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.model;
 
+import ca.uwaterloo.drinkmasterapi.common.CurrencyEnum;
+import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
+import ca.uwaterloo.drinkmasterapi.dao.Order;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

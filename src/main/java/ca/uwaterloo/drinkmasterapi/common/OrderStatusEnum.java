@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.order.model;
+package ca.uwaterloo.drinkmasterapi.common;
 
 public enum OrderStatusEnum {
     CREATED,

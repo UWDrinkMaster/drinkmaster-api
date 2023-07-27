@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.model;
+package ca.uwaterloo.drinkmasterapi.dao;
 
 import lombok.Data;
 import lombok.Getter;

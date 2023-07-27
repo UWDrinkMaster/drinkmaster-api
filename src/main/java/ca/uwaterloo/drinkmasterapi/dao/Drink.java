@@ -1,6 +1,6 @@
-package ca.uwaterloo.drinkmasterapi.feature.drink.model;
+package ca.uwaterloo.drinkmasterapi.dao;
 
-import ca.uwaterloo.drinkmasterapi.feature.order.model.CurrencyEnum;
+import ca.uwaterloo.drinkmasterapi.common.CurrencyEnum;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

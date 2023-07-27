@@ -1,6 +1,5 @@
-package ca.uwaterloo.drinkmasterapi.feature.admin.model;
+package ca.uwaterloo.drinkmasterapi.dao;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

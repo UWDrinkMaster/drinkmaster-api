@@ -1,13 +1,13 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.service;
 
 import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
+import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.feature.drink.repository.DrinkRepository;
 import ca.uwaterloo.drinkmasterapi.feature.mqtt.repository.MachineRepository;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.Order;
+import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderStatusEnum;
+import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
 import ca.uwaterloo.drinkmasterapi.feature.order.repository.OrderRepository;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

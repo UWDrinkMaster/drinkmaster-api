@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.drink.repository;
 
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
+import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

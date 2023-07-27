@@ -1,5 +1,7 @@
-package ca.uwaterloo.drinkmasterapi.feature.order.model;
+package ca.uwaterloo.drinkmasterapi.dao;
 
+import ca.uwaterloo.drinkmasterapi.common.CurrencyEnum;
+import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

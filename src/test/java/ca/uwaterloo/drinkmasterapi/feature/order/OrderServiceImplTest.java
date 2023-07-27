@@ -1,14 +1,15 @@
 package ca.uwaterloo.drinkmasterapi.feature.order;
 
 import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
+import ca.uwaterloo.drinkmasterapi.dao.Drink;
+import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.feature.drink.repository.DrinkRepository;
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
+import ca.uwaterloo.drinkmasterapi.dao.Machine;
 import ca.uwaterloo.drinkmasterapi.feature.mqtt.repository.MachineRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.model.*;
 import ca.uwaterloo.drinkmasterapi.feature.order.repository.OrderRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.OrderServiceImpl;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.User;
+import ca.uwaterloo.drinkmasterapi.dao.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;

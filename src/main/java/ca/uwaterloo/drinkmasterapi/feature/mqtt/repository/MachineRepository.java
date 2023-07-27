@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.repository;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.Machine;
+import ca.uwaterloo.drinkmasterapi.dao.Machine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

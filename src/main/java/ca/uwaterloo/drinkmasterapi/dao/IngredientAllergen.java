@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.drink.model;
+package ca.uwaterloo.drinkmasterapi.dao;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,25 +8,22 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "drink_ingredient")
+@Table(name = "ingredient_allergen")
 @Getter
 @Setter
 @ToString
-public class DrinkIngredient {
+public class IngredientAllergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "drink_id")
-    private Drink drink;
-
-    @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    @Column(name = "quantity", nullable = false, columnDefinition = "DOUBLE DEFAULT 0.0")
-    private Double quantity;
+    @ManyToOne
+    @JoinColumn(name = "allergen_id")
+    private Allergen allergen;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime createdAt;
