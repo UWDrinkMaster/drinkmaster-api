@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.order.model;
+package ca.uwaterloo.drinkmasterapi.feature.order.dto;
 
 import ca.uwaterloo.drinkmasterapi.common.CurrencyEnum;
 import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;

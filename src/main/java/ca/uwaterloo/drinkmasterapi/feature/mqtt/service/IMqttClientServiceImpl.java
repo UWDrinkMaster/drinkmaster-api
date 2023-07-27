@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.mqtt.service;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.model.MqttTopic;
+import ca.uwaterloo.drinkmasterapi.feature.mqtt.dto.MqttTopic;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

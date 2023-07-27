@@ -1,8 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.controller;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderRequestDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderResponseDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.IOrderService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

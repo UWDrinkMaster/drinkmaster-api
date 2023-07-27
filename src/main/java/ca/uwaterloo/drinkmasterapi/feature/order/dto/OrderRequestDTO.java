@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.order.model;
+package ca.uwaterloo.drinkmasterapi.feature.order.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

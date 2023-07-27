@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.mqtt.model;
+package ca.uwaterloo.drinkmasterapi.feature.mqtt.dto;
 
 public enum MqttTopic {
     POUR_TOPIC("cmd/pour"),

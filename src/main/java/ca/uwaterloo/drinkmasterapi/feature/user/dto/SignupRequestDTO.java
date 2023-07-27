@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.model;
+package ca.uwaterloo.drinkmasterapi.feature.user.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

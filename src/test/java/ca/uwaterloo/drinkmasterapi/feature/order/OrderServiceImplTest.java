@@ -6,7 +6,7 @@ import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
 import ca.uwaterloo.drinkmasterapi.dao.Machine;
 import ca.uwaterloo.drinkmasterapi.repository.MachineRepository;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.*;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.*;
 import ca.uwaterloo.drinkmasterapi.repository.OrderRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.OrderServiceImpl;
 import ca.uwaterloo.drinkmasterapi.dao.User;

@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.model;
+package ca.uwaterloo.drinkmasterapi.feature.user.dto;
 
 import ca.uwaterloo.drinkmasterapi.dao.User;
 import com.fasterxml.jackson.annotation.JsonProperty;

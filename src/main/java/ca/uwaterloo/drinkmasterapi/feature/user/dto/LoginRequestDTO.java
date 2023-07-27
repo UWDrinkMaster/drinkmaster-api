@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.model;
+package ca.uwaterloo.drinkmasterapi.feature.user.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

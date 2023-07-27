@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.mqtt.model;
+package ca.uwaterloo.drinkmasterapi.feature.mqtt.dto;
 
 // not used for mqtt
 public class PourItem {
