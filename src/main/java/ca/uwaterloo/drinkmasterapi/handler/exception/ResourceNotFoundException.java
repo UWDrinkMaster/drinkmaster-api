@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.common;
+package ca.uwaterloo.drinkmasterapi.handler.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

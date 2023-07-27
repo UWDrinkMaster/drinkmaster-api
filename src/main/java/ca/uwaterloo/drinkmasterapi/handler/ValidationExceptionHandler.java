@@ -1,8 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.handler;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
-import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
-import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.InvalidCredentialsException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

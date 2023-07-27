@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.user;
 
-import ca.uwaterloo.drinkmasterapi.common.InvalidCredentialsException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.dao.User;

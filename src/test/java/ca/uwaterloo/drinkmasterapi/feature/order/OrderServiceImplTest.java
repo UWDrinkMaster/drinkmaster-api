@@ -1,6 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.order;
 
-import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
