@@ -5,7 +5,7 @@ import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.UserResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.dao.User;
-import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
+import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

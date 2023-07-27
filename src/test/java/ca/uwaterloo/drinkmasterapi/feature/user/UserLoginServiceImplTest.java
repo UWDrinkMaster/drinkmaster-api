@@ -5,7 +5,7 @@ import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.dao.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.model.UserResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
+import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
 import ca.uwaterloo.drinkmasterapi.feature.user.service.UserLoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

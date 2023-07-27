@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.mqtt.repository;
+package ca.uwaterloo.drinkmasterapi.repository;
 
 import ca.uwaterloo.drinkmasterapi.dao.Machine;
 import org.springframework.data.jpa.repository.JpaRepository;

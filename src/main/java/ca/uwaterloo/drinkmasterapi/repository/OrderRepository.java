@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.order.repository;
+package ca.uwaterloo.drinkmasterapi.repository;
 
 import ca.uwaterloo.drinkmasterapi.dao.Order;
 import org.springframework.data.jpa.repository.JpaRepository;

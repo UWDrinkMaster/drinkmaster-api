@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.user.repository;
+package ca.uwaterloo.drinkmasterapi.repository;
 
 import ca.uwaterloo.drinkmasterapi.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;

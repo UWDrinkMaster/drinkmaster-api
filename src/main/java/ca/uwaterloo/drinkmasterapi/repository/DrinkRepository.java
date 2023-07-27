@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.drink.repository;
+package ca.uwaterloo.drinkmasterapi.repository;
 
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import org.springframework.data.jpa.repository.JpaRepository;
