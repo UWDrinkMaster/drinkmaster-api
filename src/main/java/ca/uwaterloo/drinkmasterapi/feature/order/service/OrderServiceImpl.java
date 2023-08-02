@@ -1,5 +1,6 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.service;
 
+import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
 import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
@@ -80,5 +81,25 @@ public class OrderServiceImpl implements IOrderService {
         return userOrders.stream()
                 .map(OrderResponseDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDTO cancelOrderById(Long orderId) {
+        // Check if orderId exist
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found."));
+
+        // If the order is already canceled, no need to perform any action
+        if (order.getStatus() == OrderStatusEnum.CANCELED) {
+            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " is already canceled.");
+        }
+
+        // Update the order status to "CANCELED"
+        order.setStatus(OrderStatusEnum.CANCELED);
+        order.setModifiedAt(LocalDateTime.now().withNano(0));
+        orderRepository.save(order);
+
+        // Return the canceled order as an OrderResponseDTO
+        return new OrderResponseDTO(order);
     }
 }

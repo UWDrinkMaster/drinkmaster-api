@@ -9,4 +9,6 @@ public interface IOrderService {
     OrderResponseDTO createOrder(OrderRequestDTO orderRequest);
 
     List<OrderResponseDTO> getOrderByUserId(Long userId);
+
+    OrderResponseDTO cancelOrderById(Long orderId);
 }

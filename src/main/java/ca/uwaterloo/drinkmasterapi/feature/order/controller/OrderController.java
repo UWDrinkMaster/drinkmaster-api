@@ -28,7 +28,7 @@ public class OrderController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Signup successful", response = OrderResponseDTO.class),
+            @ApiResponse(code = 201, message = "Order created successful", response = OrderResponseDTO.class),
             @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDTO.class),
             @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
     })
@@ -45,5 +45,16 @@ public class OrderController {
     public ResponseEntity<?> getOrdersByUserId(@PathVariable Long userId) {
         List<OrderResponseDTO> responseDTOs = orderService.getOrderByUserId(userId);
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/cancel/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Order canceled successfully", response = OrderResponseDTO.class),
+            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class),
+            @ApiResponse(code = 409, message = "Order already canceled", response = ErrorResponseDTO.class),
+    })
+    public ResponseEntity<?> cancelOrderByOrderId(@PathVariable Long orderId) {
+        OrderResponseDTO canceledOrderResponse = orderService.cancelOrderById(orderId);
+        return new ResponseEntity<>(canceledOrderResponse, HttpStatus.OK);
     }
 }
