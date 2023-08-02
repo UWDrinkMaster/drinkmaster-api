@@ -1,9 +1,9 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.controller;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.LoginRequestDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.UserResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.model.SignupRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.dto.LoginRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.dto.UserResponseDTO;
+import ca.uwaterloo.drinkmasterapi.feature.user.dto.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.service.IUserLoginService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

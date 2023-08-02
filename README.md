@@ -94,7 +94,7 @@ If you prefer using a local database, follow these steps:
 CREATE DATABASE drink_master;
 ```
 
-4. Run the scripts to create the required tables. Locate the SQL scripts in the `src/main/java/ca/uwaterloo/drinkmasterapi/sql` directory. Execute each script in the following order:
+4. Run the scripts to create the required tables. Locate the SQL scripts in the `src/main/resources/sql` directory. Execute each script in the following order:
 
 - `01_drop_tables.sql`
 - `01_create_tables.sql`

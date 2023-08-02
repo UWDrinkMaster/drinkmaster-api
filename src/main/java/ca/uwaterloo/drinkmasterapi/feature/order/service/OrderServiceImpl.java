@@ -1,15 +1,16 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.service;
 
-import ca.uwaterloo.drinkmasterapi.common.ResourceNotFoundException;
-import ca.uwaterloo.drinkmasterapi.feature.drink.model.Drink;
-import ca.uwaterloo.drinkmasterapi.feature.drink.repository.DrinkRepository;
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.repository.MachineRepository;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.Order;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderRequestDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.model.OrderStatusEnum;
-import ca.uwaterloo.drinkmasterapi.feature.order.repository.OrderRepository;
-import ca.uwaterloo.drinkmasterapi.feature.user.repository.UserRepository;
+import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
+import ca.uwaterloo.drinkmasterapi.dao.Drink;
+import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
+import ca.uwaterloo.drinkmasterapi.repository.MachineRepository;
+import ca.uwaterloo.drinkmasterapi.dao.Order;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderRequestDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderResponseDTO;
+import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
+import ca.uwaterloo.drinkmasterapi.repository.OrderRepository;
+import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +81,25 @@ public class OrderServiceImpl implements IOrderService {
         return userOrders.stream()
                 .map(OrderResponseDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDTO cancelOrderById(Long orderId) {
+        // Check if orderId exist
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found."));
+
+        // If the order is in "PENDING" or "COMPLETED" or "CANCELED" status
+        if (order.getStatus() != OrderStatusEnum.CREATED) {
+            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " cannot be canceled as it is already " + order.getStatus().toString());
+        }
+
+        // Update the order status to "CANCELED"
+        order.setStatus(OrderStatusEnum.CANCELED);
+        order.setModifiedAt(LocalDateTime.now().withNano(0));
+        orderRepository.save(order);
+
+        // Return the canceled order as an OrderResponseDTO
+        return new OrderResponseDTO(order);
     }
 }
