@@ -1,5 +1,7 @@
 package ca.uwaterloo.drinkmasterapi.feature.order;
 
+import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
+import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
 import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.dao.Order;
@@ -156,5 +158,51 @@ public class OrderServiceImplTest {
 
         // Act and Assert
         assertThrows(ResourceNotFoundException.class, () -> orderService.getOrderByUserId(invalidUserId));
+    }
+
+    @Test
+    public void testCancelOrderById_OrderExists_Success() {
+        // Arrange
+        Long orderId = 1L;
+
+        Order existingOrder = new Order();
+        existingOrder.setId(orderId);
+        existingOrder.setStatus(OrderStatusEnum.CREATED); // Assuming the initial status is PENDING
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
+
+        // Act
+        OrderResponseDTO canceledOrderResponse = orderService.cancelOrderById(orderId);
+
+        // Assert
+        assertNotNull(canceledOrderResponse);
+        assertEquals(orderId, canceledOrderResponse.getId());
+        assertEquals(OrderStatusEnum.CANCELED, canceledOrderResponse.getStatus());
+    }
+
+    @Test
+    public void testCancelOrderById_OrderNotFound_ThrowsResourceNotFoundException() {
+        // Arrange
+        Long nonExistentOrderId = 999L;
+
+        when(orderRepository.findById(nonExistentOrderId)).thenReturn(Optional.empty());
+
+        // Act and Assert
+        assertThrows(ResourceNotFoundException.class, () -> orderService.cancelOrderById(nonExistentOrderId));
+    }
+
+    @Test
+    public void testCancelOrderById_OrderAlreadyUpdated_ThrowsDataAlreadyUpdatedException() {
+        // Arrange
+        Long orderId = 1L;
+
+        Order existingOrder = new Order();
+        existingOrder.setId(orderId);
+        existingOrder.setStatus(OrderStatusEnum.CANCELED); // Assuming the order is already canceled
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
+
+        // Act and Assert
+        assertThrows(DataAlreadyUpdatedException.class, () -> orderService.cancelOrderById(orderId));
     }
 }

@@ -89,9 +89,9 @@ public class OrderServiceImpl implements IOrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found."));
 
-        // If the order is already canceled, no need to perform any action
-        if (order.getStatus() == OrderStatusEnum.CANCELED) {
-            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " is already canceled.");
+        // If the order is in "PENDING" or "COMPLETED" or "CANCELED" status
+        if (order.getStatus() != OrderStatusEnum.CREATED) {
+            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " cannot be canceled as it is already " + order.getStatus().toString());
         }
 
         // Update the order status to "CANCELED"
