@@ -37,6 +37,7 @@ public class UserLoginServiceImpl implements IUserLoginService {
         user.setUsername(signupRequest.getEmail());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setDateOfBirth(signupRequest.getDateOfBirth());
         user.setIsEnabled(true);
         user.setCreatedAt(currentTime);
         user.setSignedInAt(currentTime);
