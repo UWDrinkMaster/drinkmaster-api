@@ -25,6 +25,6 @@ public class SignupRequestDTO {
 
     @NotNull(message = "Date of birth should not be null")
     @Past(message = "Date of birth should be in the past")
-    @ApiModelProperty(value = "Date of birth", example = "1990-01-01", required = true)
+    @ApiModelProperty(value = "Date of birth", required = true)
     private LocalDate dateOfBirth;
 }
