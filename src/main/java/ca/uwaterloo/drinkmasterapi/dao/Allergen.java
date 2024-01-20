@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "allergen")
@@ -24,8 +24,8 @@ public class Allergen {
     private String description;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private OffsetDateTime modifiedAt;
+    private LocalDateTime modifiedAt;
 }
