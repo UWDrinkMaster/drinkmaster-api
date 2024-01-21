@@ -1,10 +1,12 @@
 package ca.uwaterloo.drinkmasterapi.feature.user.service;
 
+import ca.uwaterloo.drinkmasterapi.feature.user.dto.SobrietyTestRequestDTO;
 import ca.uwaterloo.drinkmasterapi.handler.exception.InvalidCredentialsException;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.UserResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.dao.User;
+import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,5 +68,27 @@ public class UserServiceImpl implements IUserService {
         User updatedUser = userRepository.save(user);
 
         return new UserResponseDTO(updatedUser);
+    }
+
+    @Override
+    public UserResponseDTO updateSobrietyTestScore(SobrietyTestRequestDTO sobrietyTestRequestDTO) {
+        User user = userRepository.findById(sobrietyTestRequestDTO.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + sobrietyTestRequestDTO.getUserId() + " not found."));
+
+        LocalDateTime currentTime = LocalDateTime.now().withNano(0);
+        user.setLastSobrietyTestScore(sobrietyTestRequestDTO.getScore());
+        user.setLastSobrietyTestAt(currentTime);
+        user.setModifiedAt(currentTime);
+        userRepository.save(user);
+
+        return new UserResponseDTO(user);
+    }
+
+    @Override
+    public UserResponseDTO getUserProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
+
+        return new UserResponseDTO(user);
     }
 }
