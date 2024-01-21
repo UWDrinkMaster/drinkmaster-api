@@ -4,7 +4,7 @@ import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.LoginRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.UserResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.SignupRequestDTO;
-import ca.uwaterloo.drinkmasterapi.feature.user.service.IUserLoginService;
+import ca.uwaterloo.drinkmasterapi.feature.user.service.IUserService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping("/user")
-public class UserLoginController {
-    private final IUserLoginService loginService;
+public class UserController {
+    private final IUserService loginService;
 
     @Autowired
-    public UserLoginController(IUserLoginService loginService) {
+    public UserController(IUserService loginService) {
         this.loginService = loginService;
     }
 
