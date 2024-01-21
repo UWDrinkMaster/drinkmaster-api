@@ -6,7 +6,7 @@ import ca.uwaterloo.drinkmasterapi.feature.user.dto.SignupRequestDTO;
 import ca.uwaterloo.drinkmasterapi.dao.User;
 import ca.uwaterloo.drinkmasterapi.feature.user.dto.UserResponseDTO;
 import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
-import ca.uwaterloo.drinkmasterapi.feature.user.service.UserLoginServiceImpl;
+import ca.uwaterloo.drinkmasterapi.feature.user.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ class UserLoginServiceImplTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserLoginServiceImpl userLoginService;
+    private UserServiceImpl userLoginService;
 
     @Test
     public void testSignup_WithValidCredentials_Success() {
