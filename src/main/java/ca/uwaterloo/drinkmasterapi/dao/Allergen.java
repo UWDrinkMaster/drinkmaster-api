@@ -1,8 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.dao;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "allergen")
 @Getter
 @Setter
-@ToString
+@Data
 public class Allergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
