@@ -45,7 +45,7 @@ public class DrinkController {
 
     @PostMapping(value = "/customize", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Customized drink created successful", response = DrinkRequestDTO.class),
+            @ApiResponse(code = 201, message = "Customized drink created successful", response = DrinkResponseDTO.class),
             @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDTO.class),
             @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
     })
