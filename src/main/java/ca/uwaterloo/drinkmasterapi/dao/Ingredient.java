@@ -1,8 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.dao;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "ingredient")
 @Getter
 @Setter
-@ToString
+@Data
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Ingredient {
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime modifiedAt;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "ingredient_allergen",
             joinColumns = @JoinColumn(name = "ingredient_id"),

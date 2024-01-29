@@ -1,8 +1,8 @@
 package ca.uwaterloo.drinkmasterapi.dao;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "admin")
 @Getter
 @Setter
-@ToString
+@Data
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
