@@ -1,7 +1,7 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.dto;
 
+import ca.uwaterloo.drinkmasterapi.dao.Allergen;
 import ca.uwaterloo.drinkmasterapi.dao.Ingredient;
-import ca.uwaterloo.drinkmasterapi.feature.user.dto.AllergenResponseDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -42,8 +42,9 @@ public class IngredientResponseDTO {
     @JsonProperty("is_active")
     private boolean isActive;
 
-    @ApiModelProperty(value = "List of allergens associated with the ingredient")
-    private List<AllergenResponseDTO> allergens;
+    @ApiModelProperty(value = "List of allergen IDs associated with the ingredient")
+    @JsonProperty("allergen_ids")
+    private List<Long> allergenIds;
 
     @ApiModelProperty(value = "Timestamp when the ingredient was created")
     @JsonProperty("created_at")
@@ -61,8 +62,8 @@ public class IngredientResponseDTO {
         this.description = ingredient.getDescription();
         this.inventory = ingredient.getInventory();
         this.isActive = ingredient.getIsActive();
-        this.allergens = ingredient.getAllergens().stream()
-                .map(AllergenResponseDTO::new)
+        this.allergenIds = ingredient.getAllergens().stream()
+                .map(Allergen::getId)
                 .collect(Collectors.toList());
         this.createdAt = ingredient.getCreatedAt();
         this.modifiedAt = ingredient.getModifiedAt();

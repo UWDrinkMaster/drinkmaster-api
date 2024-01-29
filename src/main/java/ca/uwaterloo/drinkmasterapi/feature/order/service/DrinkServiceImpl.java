@@ -35,6 +35,7 @@ public class DrinkServiceImpl implements IDrinkService {
         List<Ingredient> ingredients = ingredientRepository.findAll();
 
         return ingredients.stream()
+                .filter(Ingredient::getIsActive)
                 .map(IngredientResponseDTO::new)
                 .collect(Collectors.toList());
     }
