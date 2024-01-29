@@ -58,21 +58,37 @@ public class AllergenServiceImpl implements IAllergenService{
     public void associateUserWithAllergens(UserAllergenRequestDTO userAllergenRequestDTO) {
         User user = userRepository.findById(userAllergenRequestDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userAllergenRequestDTO.getUserId() + " not found."));
-        List<Long> allergenIds = userAllergenRequestDTO.getAllergenIds();
-        List<Allergen> allergens = new ArrayList<>();
-        for (Long allergenId : allergenIds) {
-            allergens.add(allergenRepository.findById(allergenId)
+
+        List<Long> inputAllergenIds = userAllergenRequestDTO.getAllergenIds();
+        List<Allergen> inputAllergens = new ArrayList<>();
+        for (Long allergenId : inputAllergenIds) {
+            inputAllergens.add(allergenRepository.findById(allergenId)
                     .orElseThrow(() -> new ResourceNotFoundException("Allergen with ID " + allergenId + " not found.")));
         }
 
+        List<UserAllergen> existingUserAllergens = userAllergenRepository.findUserAllergensByUserId(userAllergenRequestDTO.getUserId());
+        List<UserAllergen> userAllergensToDelete = existingUserAllergens.stream()
+                .filter(userAllergen -> !inputAllergenIds.contains(userAllergen.getAllergen().getId()))
+                .collect(Collectors.toList());
+
         LocalDateTime currentTime = LocalDateTime.now().withNano(0);
-        for (Allergen allergen : allergens) {
-            UserAllergen userAllergen = new UserAllergen();
-            userAllergen.setUser(user);
-            userAllergen.setAllergen(allergen);
-            userAllergen.setCreatedAt(currentTime);
-            userAllergen.setModifiedAt(currentTime);
-            userAllergenRepository.save(userAllergen);
+        List<UserAllergen> userAllergensToSave = inputAllergens.stream()
+                .filter(allergen -> existingUserAllergens.stream().noneMatch(userAllergen -> userAllergen.getAllergen().getId().equals(allergen.getId())))
+                .map(allergen -> {
+                    UserAllergen userAllergen = new UserAllergen();
+                    userAllergen.setUser(user);
+                    userAllergen.setAllergen(allergen);
+                    userAllergen.setCreatedAt(currentTime);
+                    userAllergen.setModifiedAt(currentTime);
+                    return userAllergen;
+                })
+                .collect(Collectors.toList());
+
+        if (!userAllergensToDelete.isEmpty()) {
+            userAllergenRepository.deleteInBatch(userAllergensToDelete);
+        }
+        if (!userAllergensToSave.isEmpty()) {
+            userAllergenRepository.saveAll(userAllergensToSave);
         }
     }
 }
