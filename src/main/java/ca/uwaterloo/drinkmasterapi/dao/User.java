@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -44,6 +45,14 @@ public class User {
 
     @Column(name = "last_sobriety_test_at")
     private LocalDateTime lastSobrietyTestAt;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_allergen",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "allergen_id")
+    )
+    private List<Allergen> allergens;
 
     @Column(name = "signed_in_at")
     private LocalDateTime signedInAt;

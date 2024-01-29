@@ -1,6 +1,7 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.controller;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.DrinkResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.IngredientResponseDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.IDrinkService;
 import io.swagger.annotations.ApiResponse;
@@ -29,6 +30,16 @@ public class DrinkController {
     })
     public ResponseEntity<?> getOrdersByUserId() {
         List<IngredientResponseDTO> responseDTOs = drinkService.getAllIngredients();
+        return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = DrinkResponseDTO.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
+    })
+    public ResponseEntity<?> getDrinkManuByUserId(@PathVariable Long userId) {
+        List<DrinkResponseDTO> responseDTOs = drinkService.getDrinkManuByUserId(userId);
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 }

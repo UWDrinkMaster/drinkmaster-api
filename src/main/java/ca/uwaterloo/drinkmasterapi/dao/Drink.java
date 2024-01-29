@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "drink")
@@ -25,7 +26,7 @@ public class Drink {
     private String imageUrl;
 
     @Column(name = "price")
-    private double price;
+    private Double price;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "price_currency")
@@ -37,11 +38,11 @@ public class Drink {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_active", columnDefinition = "BOOLEAN DEFAULT true")
-    private boolean isActive = true;
+    @Column(name = "is_active", nullable = false,  columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean isActive;
 
-    @Column(name = "is_customized", columnDefinition = "BOOLEAN DEFAULT false")
-    private boolean isCustomized = false;
+    @Column(name = "is_customized", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean isCustomized;
 
     @Column(name = "user_id")
     private Long userId;
@@ -54,4 +55,15 @@ public class Drink {
 
     @Column(name = "modified_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime modifiedAt;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "drink_ingredient",
+            joinColumns = @JoinColumn(name = "drink_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private List<Ingredient> ingredients;
+
+    @OneToMany(mappedBy = "drink", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DrinkIngredient> drinkIngredients;
 }
