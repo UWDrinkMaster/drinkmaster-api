@@ -1,8 +1,7 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.controller;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.dto.DrinkResponseDTO;
-import ca.uwaterloo.drinkmasterapi.feature.order.dto.IngredientResponseDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.*;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.IDrinkService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -12,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +28,7 @@ public class DrinkController {
             @ApiResponse(code = 200, message = "Success", response = IngredientResponseDTO.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
     })
-    public ResponseEntity<?> getOrdersByUserId() {
+    public ResponseEntity<?> getAllIngredients() {
         List<IngredientResponseDTO> responseDTOs = drinkService.getAllIngredients();
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
@@ -41,5 +41,16 @@ public class DrinkController {
     public ResponseEntity<?> getDrinkManuByUserId(@PathVariable Long userId) {
         List<DrinkResponseDTO> responseDTOs = drinkService.getDrinkManuByUserId(userId);
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/customize", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Customized drink created successful", response = DrinkRequestDTO.class),
+            @ApiResponse(code = 400, message = "Bad request", response = ErrorResponseDTO.class),
+            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
+    })
+    public ResponseEntity<?> createCustomizedDrink(@Valid @RequestBody DrinkRequestDTO drinkRequestDTO) {
+        //
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 }
