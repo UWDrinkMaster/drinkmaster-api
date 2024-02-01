@@ -2,16 +2,17 @@ version: 0.1
 
 phases:
   install:
+    runtime-versions:
+      java: corretto8
     commands:
       # check Java version
       - echo *** Java version ***
       - java -version
-      - mvn -version
   build:
     commands:
       # build
       - echo Building ..
-      - mvn clean package
+      - mvn package
       - echo env $ENV
       - echo $ENV > env.txt
   post_build:
