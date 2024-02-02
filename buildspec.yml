@@ -8,11 +8,12 @@ phases:
       # check Java version
       - echo *** Java version ***
       - java -version
+      - mvn -version
   build:
     commands:
       # build
       - echo Building ..
-      - mvn package
+      - mvn clean install
       - echo env $ENV
       - echo $ENV > env.txt
   post_build:
