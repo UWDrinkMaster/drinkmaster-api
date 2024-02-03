@@ -18,6 +18,6 @@ public class DrinkIngredientRequestDTO {
 
     @ApiModelProperty(value = "Quantity of the ingredient in the drink")
     @NotNull(message = "Quantity cannot be null")
-    @Positive(message = "Quantity must be positive")
+    @Positive(message = "Quantity must be positive for ingredients")
     private Double quantity;
 }

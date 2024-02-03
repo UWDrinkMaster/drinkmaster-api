@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import java.util.List;
 @Setter
 @Data
 public class DrinkRequestDTO {
+    @ApiModelProperty(value = "ID of the user created the customized drink")
+    private Long userId;
+
     @ApiModelProperty(value = "Name of the drink")
     private String name;
 
@@ -26,5 +30,6 @@ public class DrinkRequestDTO {
 
     @ApiModelProperty(value = "List of drink ingredients", required = true)
     @NotEmpty(message = "Drink ingredients list cannot be empty")
+    @Valid
     private List<DrinkIngredientRequestDTO> drinkIngredients;
 }
