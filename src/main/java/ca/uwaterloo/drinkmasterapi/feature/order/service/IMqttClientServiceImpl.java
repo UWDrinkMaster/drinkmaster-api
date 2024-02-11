@@ -1,6 +1,7 @@
-package ca.uwaterloo.drinkmasterapi.feature.mqtt.service;
+package ca.uwaterloo.drinkmasterapi.feature.order.service;
 
-import ca.uwaterloo.drinkmasterapi.feature.mqtt.dto.MqttTopic;
+import ca.uwaterloo.drinkmasterapi.common.MqttTopic;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.PourItemDTO;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -13,18 +14,17 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
 import com.amazonaws.services.securitytoken.model.Credentials;
 import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
 import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class IMqttClientServiceImpl implements IMqttClientService {
-    private static final Logger logger = LoggerFactory.getLogger(IMqttClientServiceImpl.class);
     private final AWSIotMqttClient awsIotMqttClient;
 
     public IMqttClientServiceImpl(@Value("${awsiot.clientEndpoint}") String clientEndpoint,
@@ -37,19 +37,18 @@ public class IMqttClientServiceImpl implements IMqttClientService {
     }
 
     @Override
-    public void publishPourMessage(Integer id, Integer machineId, Integer transId, String time, String content) throws AWSIotException, JsonProcessingException {
+    public void publishPourMessage(Long id, Long machineId, Long transId, LocalDateTime time, List<PourItemDTO> pourItems) throws AWSIotException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode pourObject = objectMapper.createObjectNode();
+        ArrayNode contentArray = objectMapper.valueToTree(pourItems);
 
         pourObject.put("id", id);
         pourObject.put("transId", transId);
-        pourObject.put("time", time);
+        pourObject.put("time", time.toString());
+        pourObject.put("content", contentArray);
 
-        ArrayNode contentArray = (ArrayNode) objectMapper.readTree(content);
-        pourObject.set("content", contentArray);
         AWSIotMessage pub = new AWSIotMessage(constructTopicPath(machineId, MqttTopic.POUR_TOPIC.getTopic()), AWSIotQos.QOS1, pourObject.toString());
         this.awsIotMqttClient.publish(pub);
-        logger.info("pour cmd is sent");
     }
 
     private AWSIotMqttClient initMqttClient(String clientEndpoint, String clientId, String accessKey, String secretKey, String region) throws AWSIotException {
@@ -58,20 +57,16 @@ public class IMqttClientServiceImpl implements IMqttClientService {
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(creds))
                 .build();
-        AWSIotMqttClient awsIotMqttClient = null;
+        AWSIotMqttClient awsIotMqttClient;
         final GetSessionTokenRequest getSessionTokenRequest = new GetSessionTokenRequest();
         final GetSessionTokenResult sessionTokenResult = sts.getSessionToken(getSessionTokenRequest);
         final Credentials credentials = sessionTokenResult.getCredentials();
         awsIotMqttClient = new AWSIotMqttClient(clientEndpoint, clientId, credentials.getAccessKeyId(), credentials.getSecretAccessKey(), credentials.getSessionToken());
-        if (awsIotMqttClient == null) {
-            throw new IllegalArgumentException("Failed to construct client due to missing certificate or credentials.");
-        }
         awsIotMqttClient.connect();
-        logger.info("aws MQTT client is connected");
         return awsIotMqttClient;
     }
 
-    private String constructTopicPath(Integer machineId, String mqttTopic) {
+    private String constructTopicPath(Long machineId, String mqttTopic) {
         return "aws_iot/" + machineId + "/" + mqttTopic;
     }
 }

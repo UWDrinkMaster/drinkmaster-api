@@ -1,9 +1,7 @@
 package ca.uwaterloo.drinkmasterapi.handler;
 
 import ca.uwaterloo.drinkmasterapi.common.ErrorResponseDTO;
-import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
-import ca.uwaterloo.drinkmasterapi.handler.exception.InvalidCredentialsException;
-import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
+import ca.uwaterloo.drinkmasterapi.handler.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +29,20 @@ public class ValidationExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleDataAlreadyUpdatedException(DataAlreadyUpdatedException ex) {
         log.info(ex.toString());
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponseDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(OrderFailedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderFailedException(OrderFailedException ex) {
+        log.info(ex.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponseDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InventoryShortageException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInventoryShortageException(InventoryShortageException ex) {
+        log.info(ex.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponseDTO(ex.getMessage()));
     }
 }

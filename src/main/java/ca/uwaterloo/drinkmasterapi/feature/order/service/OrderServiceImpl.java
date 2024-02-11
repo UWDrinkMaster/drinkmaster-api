@@ -1,20 +1,20 @@
 package ca.uwaterloo.drinkmasterapi.feature.order.service;
 
-import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
-import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
+import ca.uwaterloo.drinkmasterapi.dao.DrinkIngredient;
+import ca.uwaterloo.drinkmasterapi.dao.Ingredient;
+import ca.uwaterloo.drinkmasterapi.feature.order.dto.PourItemDTO;
+import ca.uwaterloo.drinkmasterapi.handler.exception.*;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
-import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
-import ca.uwaterloo.drinkmasterapi.repository.MachineRepository;
+import ca.uwaterloo.drinkmasterapi.repository.*;
 import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderResponseDTO;
 import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
-import ca.uwaterloo.drinkmasterapi.repository.OrderRepository;
-import ca.uwaterloo.drinkmasterapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,49 +23,68 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final DrinkRepository drinkRepository;
-    private final MachineRepository machineRepository;
+    private final IngredientRepository ingredientRepository;
+    private final DrinkIngredientRepository drinkIngredientRepository;
+    private final IMqttClientServiceImpl mqttClientService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             UserRepository userRepository,
                             DrinkRepository drinkRepository,
-                            MachineRepository machineRepository) {
+                            IngredientRepository ingredientRepository,
+                            DrinkIngredientRepository drinkIngredientRepository,
+                            IMqttClientServiceImpl mqttClientService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.drinkRepository = drinkRepository;
-        this.machineRepository = machineRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.drinkIngredientRepository = drinkIngredientRepository;
+        this.mqttClientService = mqttClientService;
     }
 
     @Override
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequest) {
-        // Check if userId, drinkId, and machineId exist
+        // Check if userId, drinkId exist
         userRepository.findById(orderRequest.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + orderRequest.getUserId() + " not found."));
         Drink drink = drinkRepository.findById(orderRequest.getDrinkId())
                 .orElseThrow(() -> new ResourceNotFoundException ("Drink with ID " + orderRequest.getDrinkId() + " not found."));
-        machineRepository.findById(orderRequest.getMachineId())
-                .orElseThrow(() -> new ResourceNotFoundException ("Machine with ID " + orderRequest.getMachineId() + " not found."));
 
-        // Calculate the total price based on the drink price and quantity
-        double totalPrice = drink.getPrice() * orderRequest.getQuantity();
+        List<DrinkIngredient> drinkIngredients = drinkIngredientRepository.findByDrinkId(drink.getId());
+        List<Ingredient> ingredients = updateIngredientInventory(drinkIngredients);
 
         // Create the order entity and set the attributes
         Order order = new Order();
-        LocalDateTime currentTime = LocalDateTime.now().withNano(0);
+        LocalDateTime orderPlacementTime = LocalDateTime.now().withNano(0);
 
-        order.setMachineId(orderRequest.getMachineId());
+        order.setMachineId(1L);
         order.setUserId(orderRequest.getUserId());
         order.setDrinkId(orderRequest.getDrinkId());
-        order.setQuantity(orderRequest.getQuantity());
-        order.setPrice(totalPrice);
+        order.setQuantity(1);
+        order.setPrice(drink.getPrice());
         order.setPriceCurrency(drink.getPriceCurrency());
         order.setStatus(OrderStatusEnum.CREATED);
-        order.setCreatedAt(currentTime);
-        order.setModifiedAt(currentTime);
+        order.setCreatedAt(orderPlacementTime);
+        order.setModifiedAt(orderPlacementTime);
 
         Order savedOrder = orderRepository.save(order);
 
-        return new OrderResponseDTO(savedOrder);
+        try {
+            List<PourItemDTO> pourItems = drinkIngredients.stream()
+                    .map(PourItemDTO::new)
+                    .collect(Collectors.toList());
+
+            mqttClientService.publishPourMessage(savedOrder.getId(), 1L, savedOrder.getId(), orderPlacementTime, pourItems);
+        } catch (Exception e) {
+            order.setStatus(OrderStatusEnum.CANCELED);
+            orderRepository.save(order);
+            throw new OrderFailedException("Order failed due to some internal error, please contact administrator.");
+        }
+
+        ingredientRepository.saveAll(ingredients);
+        order.setStatus(OrderStatusEnum.PENDING);
+        Order pendingOrder = orderRepository.save(order);
+        return new OrderResponseDTO(pendingOrder);
     }
 
     @Override
@@ -83,23 +102,19 @@ public class OrderServiceImpl implements IOrderService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public OrderResponseDTO cancelOrderById(Long orderId) {
-        // Check if orderId exist
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found."));
+    private List<Ingredient> updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (DrinkIngredient drinkIngredient : drinkIngredients) {
+            Ingredient ingredient = drinkIngredient.getIngredient();
+            Double requiredQuantity = drinkIngredient.getQuantity();
 
-        // If the order is in "PENDING" or "COMPLETED" or "CANCELED" status
-        if (order.getStatus() != OrderStatusEnum.CREATED) {
-            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " cannot be canceled as it is already " + order.getStatus().toString());
+            if (ingredient.getInventory() < requiredQuantity) {
+                throw new InventoryShortageException("Insufficient inventory for ingredient: " + ingredient.getName());
+            }
+
+            ingredient.setInventory(ingredient.getInventory() - requiredQuantity);
+            ingredients.add(ingredient);
         }
-
-        // Update the order status to "CANCELED"
-        order.setStatus(OrderStatusEnum.CANCELED);
-        order.setModifiedAt(LocalDateTime.now().withNano(0));
-        orderRepository.save(order);
-
-        // Return the canceled order as an OrderResponseDTO
-        return new OrderResponseDTO(order);
+        return ingredients;
     }
 }
