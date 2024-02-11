@@ -84,7 +84,7 @@ public class IMqttClientServiceImpl implements IMqttClientService {
         }
     }
 
-    private void subscribeToTopic(String topic) throws AWSIotException {
+    private void subscribeToTopic(String topic) {
         try {
             awsIotMqttClient.subscribe(new AWSIotTopic(topic, AWSIotQos.QOS0) {
                 @Override
