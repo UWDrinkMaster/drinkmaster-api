@@ -1,4 +1,4 @@
-package ca.uwaterloo.drinkmasterapi.feature.mqtt.dto;
+package ca.uwaterloo.drinkmasterapi.common;
 
 public enum MqttTopic {
     POUR_TOPIC("cmd/pour"),
@@ -9,7 +9,7 @@ public enum MqttTopic {
 
     private final String topic;
 
-    private MqttTopic(String topic) {
+    MqttTopic(String topic) {
         this.topic = topic;
     }
 
