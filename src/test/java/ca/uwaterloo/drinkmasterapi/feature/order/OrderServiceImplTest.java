@@ -1,13 +1,9 @@
 package ca.uwaterloo.drinkmasterapi.feature.order;
 
-import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
-import ca.uwaterloo.drinkmasterapi.handler.exception.DataAlreadyUpdatedException;
 import ca.uwaterloo.drinkmasterapi.handler.exception.ResourceNotFoundException;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.dao.Order;
 import ca.uwaterloo.drinkmasterapi.repository.DrinkRepository;
-import ca.uwaterloo.drinkmasterapi.dao.Machine;
-import ca.uwaterloo.drinkmasterapi.repository.MachineRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.*;
 import ca.uwaterloo.drinkmasterapi.repository.OrderRepository;
 import ca.uwaterloo.drinkmasterapi.feature.order.service.OrderServiceImpl;
@@ -41,9 +37,6 @@ public class OrderServiceImplTest {
     @Mock
     private DrinkRepository drinkRepository;
 
-    @Mock
-    private MachineRepository machineRepository;
-
     @InjectMocks
     private OrderServiceImpl orderService;
 
@@ -53,14 +46,12 @@ public class OrderServiceImplTest {
         OrderRequestDTO orderRequest = new OrderRequestDTO();
         orderRequest.setUserId(1L);
         orderRequest.setDrinkId(2L);
-        orderRequest.setMachineId(3L);
 
         Order savedOrder = new Order();
         savedOrder.setId(4L);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(drinkRepository.findById(anyLong())).thenReturn(Optional.of(new Drink()));
-        when(machineRepository.findById(anyLong())).thenReturn(Optional.of(new Machine()));
         when(orderRepository.save(any(Order.class))).thenReturn(savedOrder);
 
         // Act
@@ -79,7 +70,6 @@ public class OrderServiceImplTest {
         OrderRequestDTO orderRequest = new OrderRequestDTO();
         orderRequest.setUserId(invalidUserId);
         orderRequest.setDrinkId(2L);
-        orderRequest.setMachineId(3L);
 
         when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
 
@@ -95,7 +85,6 @@ public class OrderServiceImplTest {
         OrderRequestDTO orderRequest = new OrderRequestDTO();
         orderRequest.setUserId(1L);
         orderRequest.setDrinkId(invalidDrinkId);
-        orderRequest.setMachineId(3L);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(drinkRepository.findById(invalidDrinkId)).thenReturn(Optional.empty());
@@ -106,17 +95,12 @@ public class OrderServiceImplTest {
 
     @Test
     public void testCreateOrder_InvalidMachineId_ThrowsResourceNotFoundException() {
-        // Arrange
-        Long invalidMachineId = 999L;
-
         OrderRequestDTO orderRequest = new OrderRequestDTO();
         orderRequest.setUserId(1L);
         orderRequest.setDrinkId(2L);
-        orderRequest.setMachineId(invalidMachineId);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(drinkRepository.findById(anyLong())).thenReturn(Optional.of(new Drink()));
-        when(machineRepository.findById(invalidMachineId)).thenReturn(Optional.empty());
 
         // Act and Assert
         assertThrows(ResourceNotFoundException.class, () -> orderService.createOrder(orderRequest));
@@ -158,51 +142,5 @@ public class OrderServiceImplTest {
 
         // Act and Assert
         assertThrows(ResourceNotFoundException.class, () -> orderService.getOrderByUserId(invalidUserId));
-    }
-
-    @Test
-    public void testCancelOrderById_OrderExists_Success() {
-        // Arrange
-        Long orderId = 1L;
-
-        Order existingOrder = new Order();
-        existingOrder.setId(orderId);
-        existingOrder.setStatus(OrderStatusEnum.CREATED); // Assuming the initial status is PENDING
-
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
-
-        // Act
-        OrderResponseDTO canceledOrderResponse = orderService.cancelOrderById(orderId);
-
-        // Assert
-        assertNotNull(canceledOrderResponse);
-        assertEquals(orderId, canceledOrderResponse.getId());
-        assertEquals(OrderStatusEnum.CANCELED, canceledOrderResponse.getStatus());
-    }
-
-    @Test
-    public void testCancelOrderById_OrderNotFound_ThrowsResourceNotFoundException() {
-        // Arrange
-        Long nonExistentOrderId = 999L;
-
-        when(orderRepository.findById(nonExistentOrderId)).thenReturn(Optional.empty());
-
-        // Act and Assert
-        assertThrows(ResourceNotFoundException.class, () -> orderService.cancelOrderById(nonExistentOrderId));
-    }
-
-    @Test
-    public void testCancelOrderById_OrderAlreadyUpdated_ThrowsDataAlreadyUpdatedException() {
-        // Arrange
-        Long orderId = 1L;
-
-        Order existingOrder = new Order();
-        existingOrder.setId(orderId);
-        existingOrder.setStatus(OrderStatusEnum.CANCELED); // Assuming the order is already canceled
-
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
-
-        // Act and Assert
-        assertThrows(DataAlreadyUpdatedException.class, () -> orderService.cancelOrderById(orderId));
     }
 }
