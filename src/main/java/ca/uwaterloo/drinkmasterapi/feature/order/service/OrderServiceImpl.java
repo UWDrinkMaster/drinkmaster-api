@@ -97,26 +97,6 @@ public class OrderServiceImpl implements IOrderService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public OrderResponseDTO cancelOrderById(Long orderId) {
-        // Check if orderId exist
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found."));
-
-        // If the order is in "PENDING" or "COMPLETED" or "CANCELED" status
-        if (order.getStatus() != OrderStatusEnum.CREATED) {
-            throw new DataAlreadyUpdatedException("Order with ID " + orderId + " cannot be canceled as it is already " + order.getStatus().toString());
-        }
-
-        // Update the order status to "CANCELED"
-        order.setStatus(OrderStatusEnum.CANCELED);
-        order.setModifiedAt(LocalDateTime.now().withNano(0));
-        orderRepository.save(order);
-
-        // Return the canceled order as an OrderResponseDTO
-        return new OrderResponseDTO(order);
-    }
-
     private void updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
         List<Ingredient> ingredients = new ArrayList<>();
         for (DrinkIngredient drinkIngredient : drinkIngredients) {

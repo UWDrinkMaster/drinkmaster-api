@@ -46,15 +46,4 @@ public class OrderController {
         List<OrderResponseDTO> responseDTOs = orderService.getOrderByUserId(userId);
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
-
-    @PutMapping(value = "/cancel/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Order canceled successfully", response = OrderResponseDTO.class),
-            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class),
-            @ApiResponse(code = 409, message = "Order already canceled", response = ErrorResponseDTO.class),
-    })
-    public ResponseEntity<?> cancelOrderByOrderId(@PathVariable Long orderId) {
-        OrderResponseDTO canceledOrderResponse = orderService.cancelOrderById(orderId);
-        return new ResponseEntity<>(canceledOrderResponse, HttpStatus.OK);
-    }
 }
