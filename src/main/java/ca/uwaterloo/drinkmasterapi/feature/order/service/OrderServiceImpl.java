@@ -95,12 +95,14 @@ public class OrderServiceImpl implements IOrderService {
             eventPublisher.publishEvent(pourMessageEvent);
         } catch (Exception e) {
             order.setStatus(OrderStatusEnum.CANCELED);
+            order.setModifiedAt(LocalDateTime.now().withNano(0));
             orderRepository.save(order);
             throw new OrderFailedException("Order failed due to some internal error, please contact administrator.");
         }
 
         ingredientRepository.saveAll(ingredients);
         order.setStatus(OrderStatusEnum.PENDING);
+        order.setModifiedAt(LocalDateTime.now().withNano(0));
         Order pendingOrder = orderRepository.save(order);
         return new OrderResponseDTO(pendingOrder);
     }
@@ -125,6 +127,7 @@ public class OrderServiceImpl implements IOrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
         order.setStatus(isCompleted ? OrderStatusEnum.COMPLETED : OrderStatusEnum.CANCELED);
+        order.setModifiedAt(LocalDateTime.now().withNano(0));
         Order updatedOrder = orderRepository.save(order);
 
         // notify frontend
