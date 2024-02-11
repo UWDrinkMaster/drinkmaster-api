@@ -3,6 +3,8 @@ package ca.uwaterloo.drinkmasterapi.feature.order.service;
 import ca.uwaterloo.drinkmasterapi.dao.DrinkIngredient;
 import ca.uwaterloo.drinkmasterapi.dao.Ingredient;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.PourItemDTO;
+import ca.uwaterloo.drinkmasterapi.feature.order.event.OrderCompletionEvent;
+import ca.uwaterloo.drinkmasterapi.feature.order.event.PourDrinkEvent;
 import ca.uwaterloo.drinkmasterapi.handler.exception.*;
 import ca.uwaterloo.drinkmasterapi.dao.Drink;
 import ca.uwaterloo.drinkmasterapi.repository.*;
@@ -11,6 +13,9 @@ import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderRequestDTO;
 import ca.uwaterloo.drinkmasterapi.feature.order.dto.OrderResponseDTO;
 import ca.uwaterloo.drinkmasterapi.common.OrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,7 +30,8 @@ public class OrderServiceImpl implements IOrderService {
     private final DrinkRepository drinkRepository;
     private final IngredientRepository ingredientRepository;
     private final DrinkIngredientRepository drinkIngredientRepository;
-    private final IMqttClientServiceImpl mqttClientService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -33,13 +39,20 @@ public class OrderServiceImpl implements IOrderService {
                             DrinkRepository drinkRepository,
                             IngredientRepository ingredientRepository,
                             DrinkIngredientRepository drinkIngredientRepository,
-                            IMqttClientServiceImpl mqttClientService) {
+                            ApplicationEventPublisher eventPublisher,
+                            SimpMessagingTemplate messagingTemplate) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.drinkRepository = drinkRepository;
         this.ingredientRepository = ingredientRepository;
         this.drinkIngredientRepository = drinkIngredientRepository;
-        this.mqttClientService = mqttClientService;
+        this.eventPublisher = eventPublisher;
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    @EventListener
+    public void onOrderCompletion(OrderCompletionEvent event) {
+        updateOrderStatus(event.getOrderId(), event.isCompleted());
     }
 
     @Override
@@ -73,8 +86,13 @@ public class OrderServiceImpl implements IOrderService {
             List<PourItemDTO> pourItems = drinkIngredients.stream()
                     .map(PourItemDTO::new)
                     .collect(Collectors.toList());
-
-            mqttClientService.publishPourMessage(savedOrder.getId(), 1L, savedOrder.getId(), orderPlacementTime, pourItems);
+            PourDrinkEvent pourMessageEvent = new PourDrinkEvent(this,
+                    savedOrder.getId(),
+                    1L,
+                    savedOrder.getId(),
+                    orderPlacementTime,
+                    pourItems);
+            eventPublisher.publishEvent(pourMessageEvent);
         } catch (Exception e) {
             order.setStatus(OrderStatusEnum.CANCELED);
             orderRepository.save(order);
@@ -100,6 +118,18 @@ public class OrderServiceImpl implements IOrderService {
         return userOrders.stream()
                 .map(OrderResponseDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateOrderStatus(Long orderId, boolean isCompleted) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+        order.setStatus(isCompleted ? OrderStatusEnum.COMPLETED : OrderStatusEnum.CANCELED);
+        Order updatedOrder = orderRepository.save(order);
+
+        // notify frontend
+        OrderResponseDTO responseDTO = new OrderResponseDTO(updatedOrder);
+        messagingTemplate.convertAndSend("/topic/order-status", responseDTO);
     }
 
     private List<Ingredient> updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
