@@ -51,7 +51,7 @@ public class OrderServiceImpl implements IOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException ("Drink with ID " + orderRequest.getDrinkId() + " not found."));
 
         List<DrinkIngredient> drinkIngredients = drinkIngredientRepository.findByDrinkId(drink.getId());
-        updateIngredientInventory(drinkIngredients);
+        List<Ingredient> ingredients = updateIngredientInventory(drinkIngredients);
 
         // Create the order entity and set the attributes
         Order order = new Order();
@@ -81,6 +81,7 @@ public class OrderServiceImpl implements IOrderService {
             throw new OrderFailedException("Order failed due to some internal error, please contact administrator.");
         }
 
+        ingredientRepository.saveAll(ingredients);
         order.setStatus(OrderStatusEnum.PENDING);
         Order pendingOrder = orderRepository.save(order);
         return new OrderResponseDTO(pendingOrder);
@@ -101,7 +102,7 @@ public class OrderServiceImpl implements IOrderService {
                 .collect(Collectors.toList());
     }
 
-    private void updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
+    private List<Ingredient> updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
         List<Ingredient> ingredients = new ArrayList<>();
         for (DrinkIngredient drinkIngredient : drinkIngredients) {
             Ingredient ingredient = drinkIngredient.getIngredient();
@@ -114,6 +115,6 @@ public class OrderServiceImpl implements IOrderService {
             ingredient.setInventory(ingredient.getInventory() - requiredQuantity);
             ingredients.add(ingredient);
         }
-        ingredientRepository.saveAll(ingredients);
+        return ingredients;
     }
 }
