@@ -132,7 +132,7 @@ public class OrderServiceImpl implements IOrderService {
 
         // notify frontend
         OrderResponseDTO responseDTO = new OrderResponseDTO(updatedOrder);
-        messagingTemplate.convertAndSend("/topic/order-status", responseDTO);
+        messagingTemplate.convertAndSend("/topic/order-complete", responseDTO);
     }
 
     private List<Ingredient> updateIngredientInventory(List<DrinkIngredient> drinkIngredients) throws InvalidCredentialsException {
