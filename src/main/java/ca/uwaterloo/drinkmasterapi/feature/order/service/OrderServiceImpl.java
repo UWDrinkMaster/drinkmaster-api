@@ -76,10 +76,14 @@ public class OrderServiceImpl implements IOrderService {
 
             mqttClientService.publishPourMessage(savedOrder.getId(), 1L, savedOrder.getId(), orderPlacementTime, pourItems);
         } catch (Exception e) {
+            order.setStatus(OrderStatusEnum.CANCELED);
+            orderRepository.save(order);
             throw new OrderFailedException("Order failed due to some internal error, please contact administrator.");
         }
 
-        return new OrderResponseDTO(savedOrder);
+        order.setStatus(OrderStatusEnum.PENDING);
+        Order pendingOrder = orderRepository.save(order);
+        return new OrderResponseDTO(pendingOrder);
     }
 
     @Override
