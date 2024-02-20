@@ -33,6 +33,16 @@ public class DrinkController {
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{drinkId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = DrinkResponseDTO.class),
+            @ApiResponse(code = 404, message = "Not found", response = ErrorResponseDTO.class)
+    })
+    public ResponseEntity<?> getDrinkById(@PathVariable Long drinkId) {
+        DrinkResponseDTO responseDTO = drinkService.getDrinkById(drinkId);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = DrinkResponseDTO.class, responseContainer = "List"),
