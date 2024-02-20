@@ -50,6 +50,15 @@ public class DrinkServiceImpl implements IDrinkService {
     }
 
     @Override
+    public DrinkResponseDTO getDrinkById(Long drinkId) {
+        Drink drink = drinkRepository.findById(drinkId)
+                .orElseThrow(() -> new ResourceNotFoundException("Drink with ID " + drinkId + " not found."));
+
+        List<Long> drinkAllergenIds = getAllergensByDrink(drink);
+        return new DrinkResponseDTO(drink, drinkAllergenIds, false, false);
+    }
+
+    @Override
     public List<DrinkResponseDTO> getDrinkManuByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
