@@ -9,6 +9,8 @@ import java.util.List;
 public interface IDrinkService {
     List<IngredientResponseDTO> getAllIngredients();
 
+    DrinkResponseDTO getDrinkById(Long drinkId);
+
     List<DrinkResponseDTO> getDrinkManuByUserId(Long userId);
 
     void createCustomizedDrink(DrinkRequestDTO drinkRequestDTO);
