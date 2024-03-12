@@ -19,6 +19,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,7 +70,8 @@ public class OrderServiceImpl implements IOrderService {
 
         // Create the order entity and set the attributes
         Order order = new Order();
-        LocalDateTime orderPlacementTime = LocalDateTime.now().withNano(0);
+        ZoneId torontoZone = ZoneId.of("America/Toronto");
+        LocalDateTime orderPlacementTime = LocalDateTime.now(torontoZone).withNano(0);
 
         order.setMachineId(1L);
         order.setUserId(orderRequest.getUserId());
